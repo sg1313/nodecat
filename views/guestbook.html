@@ -5,11 +5,23 @@
     <title>Title</title>
 </head>
 <body>
+<span>ID <span>
+<span>내용 <span>
+<span>이메일<span>
+
 {% for guestbook in guestbooks %}
+<div>
 
-  {{guestbook.id}}     {{guestbook.content}}       {{guestbook.email}}
+    {{guestbook.id}}
+    {{guestbook.content}}
+    {{guestbook.email}}
+    <br>
 
-{% endfor %}}
+</div>
+    <a href="guestbooks/delete/{{guestbook.id}}" data-method="delete">삭제</a>
+    <a href="guestbooks/update/{{guestbook.id}}" data-method="update">수정</a>
+
+{% endfor %}
 
 </body>
 </html>
