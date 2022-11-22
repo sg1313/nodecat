@@ -71,6 +71,50 @@ router.get('/myguestbook', async (req, res, next) => {
     }
 })
 
+
+router.get('/guestbookform',  (req, res,next) => {
+    res.render('guestform');
+})
+
+router.post('/guestbookscreate', async (req, res, next) => {
+    console.log("55555555->");
+
+    const {name, email, content} = req.body;
+    let data = {
+        'nick':name, 'email':email, 'content':content
+    }
+    console.log("55555555->", data);
+    try {
+        const result = await request_post(req, '/guestbooks/create', data);
+        if( result.data.code === 200){
+            res.redirect('/myguestbook');
+        }
+    }
+    catch (error){
+        console.error(error);
+    }
+})
+
+router.post('/guestbooksupdate', async (req, res, next) => {
+    const {id, name, email, content} = req.body;
+    let data = {
+        'id':id, 'nick':name, 'email':email, 'content':content
+    }
+    try {
+        const result = await request_post(req, '/guestbooks/update', data);
+        // res.json(result.data);
+        if (result.data.code === 200) {
+            // console.log(result.data.payload);
+            res.redirect('/myguestbook');
+        }
+    }
+    catch (error){
+        console.error(error);
+    }
+})
+
+
+
 router.get('/guestbooks/delete/:id', async (req, res, next) => {
     console.log('삭제', req.params.id);
     try {
@@ -85,7 +129,6 @@ router.get('/guestbooks/delete/:id', async (req, res, next) => {
         next(error);
     }
 })
-
 
 router.get('/guestbooks/update/:id', async (req, res, next) => {
     console.log('삭제', req.params.id);
@@ -102,45 +145,6 @@ router.get('/guestbooks/update/:id', async (req, res, next) => {
         next(error);
     }
 })
-
-
-
-
-router.get('/guestbookform',  (req, res,next) => {
-    res.render('guestform');
-})
-
-router.post('/guestbookscreate', async (req, res, next) => {
-    const {name, email, content} = req.body;
-    let data = {
-        name, email, content
-    }
-    try {
-        const result = await request_post(req, '/guestbooks/create', data); // await 꼭 붙여주기 !! promise 떠서 자꾸 안됐음,,
-        res.json(result.data);
-        console.log('result -> ', result);
-    }
-    catch (error){
-        console.error(error);
-    }
-})
-
-
-router.post('/guestbooksupdate', async (req, res, next) => {
-    const {id, name, email, content} = req.body;
-    let data = {
-        id:'id', name:'name', email:'email', content:'content'
-    }
-    try {
-        const result = await request_post(req, '/guestbooks/update', data);
-        res.json(result.data);
-        console.log('result -> ', result);
-    }
-    catch (error){
-        console.error(error);
-    }
-})
-
 
 
 
